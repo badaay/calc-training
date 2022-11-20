@@ -1,0 +1,16 @@
+# baseURL
+@baseURL = http://localhost:3000
+@path = history
+###
+# Find All Histories
+GET {{ baseURL }}/{{ path }}
+
+###
+# Create History
+POST {{ baseURL }}/{{ path }}
+Content-Type: application/json
+
+{
+    "email": "example@email.com",
+    "activity": "12+3/19"
+}
