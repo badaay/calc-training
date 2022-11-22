@@ -6,6 +6,7 @@ interface ButtonProps {
   children?: React.ReactNode
   color?: 'red' | 'green' | 'dark'
   isLarge?: boolean
+  type?: 'button' | 'submit'
   onClick?: () => void
 }
 
@@ -59,6 +60,7 @@ export const StyledButton = styled.button<ButtonProps>`
   padding-bottom: 1em;
   transition: background-color 0.15s ease-in-out, opacity 0.15s ease-in-out;
   ${({ color }) => colorToCss(color)}
+  ${({ type }) => type}
   ${({ isLarge }) =>
     isLarge &&
     css`
@@ -93,9 +95,9 @@ export const StyledButton = styled.button<ButtonProps>`
   }
 `
 
-export const Button: FunctionComponent<ButtonProps> = ({ children, color, isLarge, onClick }) => {
+export const Button: FunctionComponent<ButtonProps> = ({ children, color, isLarge, type, onClick }) => {
   return (
-    <StyledButton color={color} isLarge={isLarge} onClick={onClick}>
+    <StyledButton color={color} isLarge={isLarge} type={type} onClick={onClick}>
       {children}
     </StyledButton>
   )

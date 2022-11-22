@@ -45,7 +45,7 @@ export const Screen: FunctionComponent<DisplayProps> = ({ value, expression }) =
           {expression}
         </StyledExpression>
       </StyledIndicatorList>
-
+      
       <StyleScreen>
         {value}
       </StyleScreen>
