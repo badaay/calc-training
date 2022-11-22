@@ -42,11 +42,11 @@ class AuthController {
 
   public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      const userData: User = req.user;
-      const logOutUserData: User = await this.authService.logout(userData);
+      // const userData: User = req.user;
+      // const logOutUserData: User = await this.authService.logout(userData);
 
       const activityData: CreateUserActivityDto = {
-        email:userData.email,
+        email:req.body.email,
         type:"logout"
       }
       await this.userActivityService.logActivity(activityData)
