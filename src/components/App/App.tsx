@@ -1,10 +1,12 @@
 import React, { FunctionComponent, useState } from 'react'
 import styled from 'styled-components'
 import Display from '../Display/Display'
+import TerbilangDisplay from '../Display/Terbilang' 
 import Pad from '../Pad/Pad'
 import { Digit, Operator } from '../../lib/types'
 import "../../style.css"
 import Button from '../Button/Button'
+import Terbilang from 'terbilang-ts'
 
 const StyledApp = styled.div`
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue" ,Arial ,sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -78,6 +80,8 @@ export const App: FunctionComponent = () => {
   const [waitingForOperand, setWaitingForOperand] = useState<boolean>(true)
   const [pendingOperator, setPendingOperator] = useState<Operator>()
   const [display, setDisplay] = useState<string>('0')
+  const [terbilangDisplay, setTerbilangDisplay] = useState<string>("")
+
   const [state, dispatch] = React.useReducer(loginReducer, initialState);
   const { email, password, isLoading, error, isLoggedIn, token} = state;
 
@@ -224,6 +228,7 @@ export const App: FunctionComponent = () => {
       setPendingOperator(undefined)
     } else {
       setDisplay(operand.toString())
+      setTerbilangDisplay(Terbilang(operand))
     }
 
     setResult(operand)
@@ -256,6 +261,9 @@ export const App: FunctionComponent = () => {
               <div>
 
               </div>
+              <StyledApp>
+                <TerbilangDisplay value={terbilangDisplay} />
+              </StyledApp>
               <StyledApp>
                 <Display value={display} expression={typeof pendingOperator !== 'undefined' ? `${result}${pendingOperator}${waitingForOperand ? '' : display}` : ''} />
                 <Pad
