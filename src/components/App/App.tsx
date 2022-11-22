@@ -83,7 +83,8 @@ export const App: FunctionComponent = () => {
   const [terbilangDisplay, setTerbilangDisplay] = useState<string>("")
 
   const [state, dispatch] = React.useReducer(loginReducer, initialState);
-  const { email, password, isLoading, error, isLoggedIn, token} = state;
+  const { email, password, isLoading, error, isLoggedIn} = state;
+  
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -99,8 +100,9 @@ export const App: FunctionComponent = () => {
       }).catch(result => {
         const data = result.body;
         console.log(data);
-
-        // localStorage.setItem('token', data.data.token);
+        // if(data.success){
+          localStorage.setItem('token', data.data.token);
+        // }
 
       });
 
@@ -117,12 +119,14 @@ export const App: FunctionComponent = () => {
     try {
       const res = await fetch( url, {
         method: 'POST',
-        headers: {
-          'Content-type': 'application/json'
-        },
+        headers: new Headers({
+          'Authorization': 'Bearer '+localStorage.getItem('token'), 
+          'Content-Type': 'application/json'
+        }),
         body: JSON.stringify({ email, password })
+      }).catch(result => {
+        const data = result.body;
       });
-      dispatch({ type: "success" });
     } catch (error) {
       dispatch({ type: "error" });
     }
@@ -257,10 +261,8 @@ export const App: FunctionComponent = () => {
               <Button type="submit">
                 Log out
               </Button>
-
-              <div>
-
-              </div>
+            </form>
+            
               <StyledApp>
                 <TerbilangDisplay value={terbilangDisplay} />
               </StyledApp>
@@ -276,7 +278,6 @@ export const App: FunctionComponent = () => {
                   onClearEntryButtonClick={onClearEntryButtonClick}
                 />
               </StyledApp>
-            </form>
           </>
         ) : (
           <form className="form" onSubmit={onSubmit}>
