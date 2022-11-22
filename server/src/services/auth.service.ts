@@ -6,10 +6,12 @@ import { HttpException } from '@exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface';
 import { User } from '@interfaces/users.interface';
 import userModel from '@models/users.model';
+import UserActivityModel from '@/models/user-activity.model';
 import { isEmpty } from '@utils/util';
 
 class AuthService {
   public users = userModel;
+  public activity = UserActivityModel;
 
   public async signup(userData: CreateUserDto): Promise<User> {
     if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
@@ -23,7 +25,7 @@ class AuthService {
     return createUserData;
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {
+  public async login(userData: CreateUserDto): Promise<{ tokenData: string; findUser: User }> {
     if (isEmpty(userData)) throw new HttpException(400, "userData is empty");
 
     const findUser: User = await this.users.findOne({ email: userData.email });
@@ -35,7 +37,7 @@ class AuthService {
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
 
-    return { cookie, findUser };
+    return { tokenData, findUser};
   }
 
   public async logout(userData: User): Promise<User> {
